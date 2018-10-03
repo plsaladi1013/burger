@@ -1,0 +1,73 @@
+<div class="row">
+  <div class="col-md-12">
+    <h2>Eat-Da-burger!</h2>
+  </div>
+  <div class="col-md-6">
+    {{#each burger}} {{#unless this.devoured}}
+    <ul class="list-group">
+      <li>{{this.id}}. {{this.burger_name}}</li>
+      <a href="#" data-burgerId={{this.id}} class="btn btn-danger devourBurger">Devour!</a>
+    </ul>
+    {{else}} {{/unless}} {{/each}}
+    </ul>
+  </div>
+  <div class="col-md-6">
+    {{#each burger}} {{#unless this.devoured}} {{else}}
+    <ul class="list-group">
+      <li>{{this.id}}. {{this.burger_name}}</li>
+      {{/unless}} {{/each}}
+    </ul>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      </br>
+      </br>
+      <form class="create-form">
+        <div class="form-group">
+          <label for="ca"></label>
+          <textarea class="form-control" id="ca" rows="3" name="name"></textarea>
+        </div>
+        <button id= "newBurger" type="submit">submit</button>
+      </form>
+      Enter a burger you want to eat Click the "Submit" button.
+      </form>
+    </div>
+  </div>
+  <script>
+
+    $(document).ready(function () {
+      $(".devourBurger").click(function () {
+        var burgerId = $(this).attr("data-burgerId");
+        console.log(burgerId);
+        var burgerIdInfo = {
+          burger_id: burgerId
+        }
+     
+        
+        $.ajax("/", {
+          type: "PUT",
+          data: burgerIdInfo
+        }).then(function () {
+          location.reload();
+        })
+      })
+       $("#newBurger").click(function(){
+        var newBurger = $("#ca").val().trim();
+        console.log(newBurger);
+        var newBurgerData = {
+          burger_name : newBurger,
+           devoured : 0
+        }
+        $.ajax("/api/burger",{
+          type: "POST",
+          data: newBurgerData
+        }).then(function(data){
+          console.log(data);
+          //location.reload();
+        })
+      })
+    })
+
+
+
+  </script>
